@@ -1,28 +1,40 @@
 # Diamond Girl for GFOS / OpenUp
 # Target: Cradle boards / os32-gcc16-open6 stove
-# Uses shared OpenUp libraries (SDL2.module)
-# Non-OpenGL window-surface path
+# Uses shared OpenUp libraries (SDL2.module / GFOpenGPU)
+# Non-OpenGL window-surface path preferred for 68040
+# Graphics presentation: OpenLayout overlay + OpenGFX (preferred on Cradle boards)
 # Upstream already has #if defined(AMIGA) PROGDIR: data/save paths
 
 STOVE ?= $(HOME)/AmiCradle/stoves/os32-gcc16-open6
 CC     = $(STOVE)/bin/m68k-amigaos-gcc
 # -include forces the shim before any SDL1 header so mappings apply everywhere
-CFLAGS = -O2 -m68040 -msoft-float -DGFOS -DAMIGA -DPROGDIR_DATA -I./src -DWITH_NONOPENGL \
+CFLAGS = -O2 -m68040 -msoft-float -DGFOS -DAMIGA -DPROGDIR_DATA -DWITH_NONOPENGL \
+         -I./src -I../upstream/src \
          -include ./src/sdl1_to_sdl2.h
-# OpenUp SDL2.module / GFOpenGPU headers expected on the stove
 INCLUDES = -I$(STOVE)/include
 LIBS     = -lSDL2 -lSDL2_image
 
-# Build the window holder + any local objects, then link against upstream objects
-OBJS = src/dg_window.o
+# Local objects (shim holder + any OpenLayout stubs)
+LOCAL_OBJS = src/dg_window.o
+
+# Upstream sources are expected under ../upstream/src after package/build-amiga.sh fetch
+# This is a skeleton: the full upstream list is large (see upstream/src/Makefile.am).
+# First stove build: compile the core set below once upstream/ is present.
+UPSTREAM_SRCS = \
+	../upstream/src/main.c \
+	../upstream/src/get_data_filename.c \
+	../upstream/src/get_save_filename.c
+
+UPSTREAM_OBJS = $(UPSTREAM_SRCS:.c=.o)
 
 all: diamond-girl
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-diamond-girl: $(OBJS)
-	@echo "Link step needs upstream objects compiled with the same CFLAGS"
-	@echo "Once src/*.c are built with -include shim, link with $(LIBS)"
+diamond-girl: $(LOCAL_OBJS) $(UPSTREAM_OBJS)
+	$(CC) -o $@ $(LOCAL_OBJS) $(UPSTREAM_OBJS) $(LIBS)
+	@echo "Linked against OpenUp SDL2.module"
+	@echo "Preferred presentation: OpenLayout overlay + OpenGFX (not full SDL surface)"
 
 .PHONY: all
