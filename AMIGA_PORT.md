@@ -12,7 +12,10 @@ Target: Cradle boards / os32-gcc16-open6 stove.
 
 ## Status
 
-Port underway. Source pinned. SDL1->SDL2 compatibility shim added (src/sdl1_to_sdl2.h). Makefile.amiga updated. Surface/renderer adaptation still needed before first stove build.
+Port underway. Window-surface path in place:
+- src/sdl1_to_sdl2.h — maps SDL_SetVideoMode, SDL_Flip, SDL_WM_SetCaption/Icon, events, surfaces
+- src/dg_window.c — global window holder
+Non-OpenGL path preferred for 68040. Data path adaptation and first stove build still to do.
 
 ## Build target
 
@@ -22,7 +25,7 @@ Uses shared OpenUp libraries (LIBS:GFOpenGPU/SDL2.module). Data path PROGDIR:. 6
 
 ## Next
 
-1. Expand the SDL1->SDL2 shim for surface drawing.
+1. Include the shim in gfx.c / main.c and wire the window-surface path.
 2. Adapt data paths to PROGDIR:.
 3. First stove build and Cradle lab test (input, audio, exit).
 
