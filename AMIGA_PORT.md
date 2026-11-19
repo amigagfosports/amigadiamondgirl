@@ -9,24 +9,25 @@ Target: Cradle boards / os32-gcc16-open6 stove.
 - Upstream: https://github.com/Peanhua/diamond-girl (GPL-2.0)
 - Pin: master (as of 2026-11-19)
 - Build system: autotools. Main is SDL1.2.
+- Upstream already contains `#if defined(AMIGA)` paths in get_data_filename.c and get_save_filename.c that use PROGDIR:.
 
 ## Status
 
 Port underway. Window-surface path in place:
 - src/sdl1_to_sdl2.h — maps SDL_SetVideoMode, SDL_Flip, SDL_WM_SetCaption/Icon, events, surfaces
 - src/dg_window.c — global window holder
-Non-OpenGL path preferred for 68040. Data path adaptation and first stove build still to do.
+- package/Makefile.amiga defines -DAMIGA so the upstream PROGDIR: paths activate
+Non-OpenGL path preferred for 68040. First stove build still to do.
 
 ## Build target
 
     STOVE=~/AmiCradle/stoves/os32-gcc16-open6
 
-Uses shared OpenUp libraries (LIBS:GFOpenGPU/SDL2.module). Data path PROGDIR:. 68040 fit expected for this 2D title.
+Uses shared OpenUp libraries (LIBS:GFOpenGPU/SDL2.module). Data path PROGDIR: (activated by -DAMIGA). 68040 fit expected for this 2D title.
 
 ## Next
 
 1. Include the shim in gfx.c / main.c and wire the window-surface path.
-2. Adapt data paths to PROGDIR:.
-3. First stove build and Cradle lab test (input, audio, exit).
+2. First stove build and Cradle lab test (input, audio, exit).
 
 Designed, tested and delivered by The AmiCradle Team.
