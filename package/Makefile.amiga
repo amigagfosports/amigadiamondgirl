@@ -1,18 +1,19 @@
 # Diamond Girl for GFOS / OpenUp
 # Target: Cradle boards / os32-gcc16-open6 stove
 # Uses shared OpenUp libraries (SDL2.module)
+# Non-OpenGL window-surface path
 
 STOVE ?= $(HOME)/AmiCradle/stoves/os32-gcc16-open6
 CC     = $(STOVE)/bin/m68k-amigaos-gcc
-CFLAGS = -O2 -m68040 -msoft-float -DGFOS -DPROGDIR_DATA -I./src
+CFLAGS = -O2 -m68040 -msoft-float -DGFOS -DPROGDIR_DATA -I./src -DWITH_NONOPENGL
 # OpenUp SDL2.module / GFOpenGPU headers expected on the stove
 INCLUDES = -I$(STOVE)/include
 
 all:
-	@echo "Diamond Girl GFOS build target"
+	@echo "Diamond Girl GFOS build target (window-surface path)"
 	@echo "Source: Peanhua/diamond-girl (SDL1.2)"
-	@echo "Shim: src/sdl1_to_sdl2.h (expand for surface/renderer)"
-	@echo "Next: include shim, adapt draw paths, link against OpenUp SDL2.module"
+	@echo "Shim: src/sdl1_to_sdl2.h + src/dg_window.c"
+	@echo "Next: include shim in gfx.c / main, adapt data paths to PROGDIR:, first stove build"
 	@echo "Data: package under PROGDIR:"
 
 .PHONY: all
