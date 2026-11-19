@@ -17,7 +17,9 @@ Wiring done. Window-surface path in place:
 - src/sdl1_to_sdl2.h — maps SDL_SetVideoMode, SDL_Flip, SDL_WM_SetCaption/Icon, events, surfaces
 - src/dg_window.c — global window holder
 - package/Makefile.amiga force-includes the shim (`-include ./src/sdl1_to_sdl2.h`) so every compile unit sees the mappings, and defines -DAMIGA so the upstream PROGDIR: paths activate
-Non-OpenGL path preferred for 68040. Ready for first stove build.
+Non-OpenGL path preferred for 68040.
+
+Graphics presentation: the new overlay presentation offered via OpenLayout (with OpenGFX) is the preferred path for the Cradle boards. This reduces the need for full SDL surface emulation.
 
 ## Build target
 
@@ -28,6 +30,7 @@ Uses shared OpenUp libraries (LIBS:GFOpenGPU/SDL2.module). Data path PROGDIR: (a
 ## Next
 
 1. First stove build (compile upstream src/*.c with the Makefile CFLAGS, link with -lSDL2 -lSDL2_image).
-2. Cradle lab test (input, audio, exit).
+2. Route presentation through the OpenLayout overlay + OpenGFX path.
+3. Cradle lab test (input, audio, exit).
 
 Designed, tested and delivered by The AmiCradle Team.
