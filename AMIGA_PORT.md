@@ -13,11 +13,11 @@ Target: Cradle boards / os32-gcc16-open6 stove.
 
 ## Status
 
-Port underway. Window-surface path in place:
+Wiring done. Window-surface path in place:
 - src/sdl1_to_sdl2.h — maps SDL_SetVideoMode, SDL_Flip, SDL_WM_SetCaption/Icon, events, surfaces
 - src/dg_window.c — global window holder
-- package/Makefile.amiga defines -DAMIGA so the upstream PROGDIR: paths activate
-Non-OpenGL path preferred for 68040. First stove build still to do.
+- package/Makefile.amiga force-includes the shim (`-include ./src/sdl1_to_sdl2.h`) so every compile unit sees the mappings, and defines -DAMIGA so the upstream PROGDIR: paths activate
+Non-OpenGL path preferred for 68040. Ready for first stove build.
 
 ## Build target
 
@@ -27,7 +27,7 @@ Uses shared OpenUp libraries (LIBS:GFOpenGPU/SDL2.module). Data path PROGDIR: (a
 
 ## Next
 
-1. Include the shim in gfx.c / main.c and wire the window-surface path.
-2. First stove build and Cradle lab test (input, audio, exit).
+1. First stove build (compile upstream src/*.c with the Makefile CFLAGS, link with -lSDL2 -lSDL2_image).
+2. Cradle lab test (input, audio, exit).
 
 Designed, tested and delivered by The AmiCradle Team.
