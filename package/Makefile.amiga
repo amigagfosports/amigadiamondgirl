@@ -6,15 +6,23 @@
 
 STOVE ?= $(HOME)/AmiCradle/stoves/os32-gcc16-open6
 CC     = $(STOVE)/bin/m68k-amigaos-gcc
-CFLAGS = -O2 -m68040 -msoft-float -DGFOS -DAMIGA -DPROGDIR_DATA -I./src -DWITH_NONOPENGL
+# -include forces the shim before any SDL1 header so mappings apply everywhere
+CFLAGS = -O2 -m68040 -msoft-float -DGFOS -DAMIGA -DPROGDIR_DATA -I./src -DWITH_NONOPENGL \
+         -include ./src/sdl1_to_sdl2.h
 # OpenUp SDL2.module / GFOpenGPU headers expected on the stove
 INCLUDES = -I$(STOVE)/include
+LIBS     = -lSDL2 -lSDL2_image
 
-all:
-	@echo "Diamond Girl GFOS build target (window-surface path)"
-	@echo "Source: Peanhua/diamond-girl (SDL1.2)"
-	@echo "Shim: src/sdl1_to_sdl2.h + src/dg_window.c"
-	@echo "Data: -DAMIGA activates upstream PROGDIR: paths in get_data_filename / get_save_filename"
-	@echo "Next: include shim in gfx.c / main, first stove build"
+# Build the window holder + any local objects, then link against upstream objects
+OBJS = src/dg_window.o
+
+all: diamond-girl
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+diamond-girl: $(OBJS)
+	@echo "Link step needs upstream objects compiled with the same CFLAGS"
+	@echo "Once src/*.c are built with -include shim, link with $(LIBS)"
 
 .PHONY: all
