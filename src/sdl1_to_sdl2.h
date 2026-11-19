@@ -2,6 +2,9 @@
  * Target: Cradle boards / os32-gcc16-open6 stove
  * Uses OpenUp SDL2.module
  *
+ * Force-included by package/Makefile.amiga via -include so every
+ * compilation unit sees the mappings before any SDL1 header.
+ *
  * Uses SDL2 window surface so existing SDL_Surface drawing can stay.
  * Non-OpenGL path preferred for 68040.
  */
