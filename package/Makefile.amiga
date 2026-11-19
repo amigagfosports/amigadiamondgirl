@@ -2,10 +2,11 @@
 # Target: Cradle boards / os32-gcc16-open6 stove
 # Uses shared OpenUp libraries (SDL2.module)
 # Non-OpenGL window-surface path
+# Upstream already has #if defined(AMIGA) PROGDIR: data/save paths
 
 STOVE ?= $(HOME)/AmiCradle/stoves/os32-gcc16-open6
 CC     = $(STOVE)/bin/m68k-amigaos-gcc
-CFLAGS = -O2 -m68040 -msoft-float -DGFOS -DPROGDIR_DATA -I./src -DWITH_NONOPENGL
+CFLAGS = -O2 -m68040 -msoft-float -DGFOS -DAMIGA -DPROGDIR_DATA -I./src -DWITH_NONOPENGL
 # OpenUp SDL2.module / GFOpenGPU headers expected on the stove
 INCLUDES = -I$(STOVE)/include
 
@@ -13,7 +14,7 @@ all:
 	@echo "Diamond Girl GFOS build target (window-surface path)"
 	@echo "Source: Peanhua/diamond-girl (SDL1.2)"
 	@echo "Shim: src/sdl1_to_sdl2.h + src/dg_window.c"
-	@echo "Next: include shim in gfx.c / main, adapt data paths to PROGDIR:, first stove build"
-	@echo "Data: package under PROGDIR:"
+	@echo "Data: -DAMIGA activates upstream PROGDIR: paths in get_data_filename / get_save_filename"
+	@echo "Next: include shim in gfx.c / main, first stove build"
 
 .PHONY: all
