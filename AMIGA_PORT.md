@@ -12,7 +12,7 @@ Target: Cradle boards / os32-gcc16-open6 stove.
 
 ## Status
 
-Source pinned. Makefile.amiga skeleton added. SDL1.2 → SDL2.module adaptation still required before first stove build.
+Port underway. Source pinned. SDL1->SDL2 compatibility shim added (src/sdl1_to_sdl2.h). Makefile.amiga updated. Surface/renderer adaptation still needed before first stove build.
 
 ## Build target
 
@@ -22,7 +22,7 @@ Uses shared OpenUp libraries (LIBS:GFOpenGPU/SDL2.module). Data path PROGDIR:. 6
 
 ## Next
 
-1. SDL1 → SDL2 adaptation (or SDL1 compatibility layer on OpenUp).
+1. Expand the SDL1->SDL2 shim for surface drawing.
 2. Adapt data paths to PROGDIR:.
 3. First stove build and Cradle lab test (input, audio, exit).
 
